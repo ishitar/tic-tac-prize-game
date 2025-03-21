@@ -78,7 +78,7 @@
 
   /* Custom game styles */
   .glass-card {
-    @apply bg-white/70 backdrop-blur-sm rounded-2xl border border-white/40 shadow-glass;
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl border border-white/60 shadow-glass;
   }
 
   .prize-card {
@@ -88,7 +88,7 @@
   .game-square {
     @apply flex items-center justify-center 
            text-5xl font-light transition-all duration-300 ease-out 
-           border-game-border select-none relative;
+           border-2 border-game-border select-none relative;
   }
 
   .game-square:first-child,
@@ -117,13 +117,13 @@
 
   /* SVG drawing animations */
   .x-shape svg path {
-    @apply stroke-game-player stroke-2 animate-draw-x;
+    @apply stroke-game-player stroke-[6] animate-draw-x;
     stroke-dasharray: 100;
     stroke-dashoffset: 100;
   }
 
   .o-shape svg circle {
-    @apply stroke-game-ai stroke-2 fill-transparent animate-draw-circle;
+    @apply stroke-game-ai stroke-[6] fill-transparent animate-draw-circle;
     stroke-dasharray: 0 100;
     opacity: 0;
   }

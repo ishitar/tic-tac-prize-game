@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
@@ -41,18 +40,18 @@ const Index = () => {
     setGameStatus(newGameStatus);
   };
 
-  // Handle AI's turn
+  // Handle AI's turn - with quicker response time
   useEffect(() => {
     // Check if it's AI's turn
     if (gameStatus.currentPlayer === 'O' && gameStatus.state === 'playing') {
       setAiThinking(true);
       
-      // Add a small delay to simulate thinking
+      // Reduced timeout for quicker AI response (300ms instead of 600ms)
       const timer = setTimeout(() => {
         const aiGameStatus = makeAIMove(gameStatus);
         setGameStatus(aiGameStatus);
         setAiThinking(false);
-      }, 600);
+      }, 300);
       
       return () => clearTimeout(timer);
     }

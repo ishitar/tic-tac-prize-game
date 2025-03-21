@@ -27,9 +27,9 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameStatus, onSquareClick }) => {
 
   return (
     <div 
-      className="grid grid-cols-3 gap-0 border-2 border-game-border rounded-lg overflow-hidden 
-                 bg-game-board shadow-lg transform transition-transform duration-500 
-                 w-[242px] md:w-[302px] mx-auto"
+      className="grid grid-cols-3 gap-0 border-4 border-game-border rounded-lg overflow-hidden 
+                 bg-white shadow-lg transform transition-transform duration-500 
+                 w-[270px] md:w-[330px] mx-auto"
       aria-label="Tic Tac Toe game board"
     >
       {Array(9).fill(null).map((_, index) => renderSquare(index))}

@@ -77,49 +77,65 @@ export const makeMove = (gameStatus: GameStatus, squareIndex: number): GameStatu
   };
 };
 
-// AI makes a move
+// AI makes a move - now with quicker, more randomized response
 export const makeAIMove = (gameStatus: GameStatus): GameStatus => {
   if (gameStatus.state !== 'playing' || gameStatus.currentPlayer !== 'O') {
     return gameStatus;
   }
 
   const board = gameStatus.board;
-  let moveIndex = -1;
-
-  // Try to win
-  moveIndex = findWinningMove(board, 'O');
-  if (moveIndex !== -1) {
-    return makeMove({ ...gameStatus, currentPlayer: 'O' }, moveIndex);
-  }
-
-  // Block player from winning
-  moveIndex = findWinningMove(board, 'X');
-  if (moveIndex !== -1) {
-    return makeMove({ ...gameStatus, currentPlayer: 'O' }, moveIndex);
-  }
-
-  // Take center if available
-  if (board[4] === null) {
-    return makeMove({ ...gameStatus, currentPlayer: 'O' }, 4);
-  }
-
-  // Take a corner
-  const corners = [0, 2, 6, 8];
-  const availableCorners = corners.filter(i => board[i] === null);
-  if (availableCorners.length > 0) {
-    const randomCorner = availableCorners[Math.floor(Math.random() * availableCorners.length)];
-    return makeMove({ ...gameStatus, currentPlayer: 'O' }, randomCorner);
-  }
-
-  // Take any available square
+  
+  // Get all available moves
   const availableSquares = board.map((square, i) => square === null ? i : null).filter(i => i !== null) as number[];
-  if (availableSquares.length > 0) {
-    const randomSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
-    return makeMove({ ...gameStatus, currentPlayer: 'O' }, randomSquare);
+  
+  if (availableSquares.length === 0) {
+    return gameStatus;
   }
-
-  // No moves available
-  return gameStatus;
+  
+  // Random move selection (30% chance)
+  if (Math.random() < 0.3) {
+    const randomIndex = Math.floor(Math.random() * availableSquares.length);
+    return makeMove({ ...gameStatus, currentPlayer: 'O' }, availableSquares[randomIndex]);
+  }
+  
+  // Otherwise use strategy with slightly randomized priorities
+  const strategies = [
+    // Try to win
+    () => findWinningMove(board, 'O'),
+    // Block player from winning
+    () => findWinningMove(board, 'X'),
+    // Take center if available
+    () => board[4] === null ? 4 : -1,
+    // Take a corner
+    () => {
+      const corners = [0, 2, 6, 8];
+      const availableCorners = corners.filter(i => board[i] === null);
+      if (availableCorners.length > 0) {
+        return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+      }
+      return -1;
+    },
+    // Take any available square
+    () => availableSquares[Math.floor(Math.random() * availableSquares.length)]
+  ];
+  
+  // Shuffle strategies slightly for more randomness
+  if (Math.random() < 0.2) {
+    const temp = strategies[2];
+    strategies[2] = strategies[3];
+    strategies[3] = temp;
+  }
+  
+  // Try each strategy until one works
+  for (const strategy of strategies) {
+    const moveIndex = strategy();
+    if (moveIndex !== -1) {
+      return makeMove({ ...gameStatus, currentPlayer: 'O' }, moveIndex);
+    }
+  }
+  
+  // Fallback - should never reach here
+  return makeMove({ ...gameStatus, currentPlayer: 'O' }, availableSquares[0]);
 };
 
 // Find a winning move for the given player
