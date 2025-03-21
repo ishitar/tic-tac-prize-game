@@ -47,8 +47,7 @@ export const makeMove = (gameStatus: GameStatus, squareIndex: number): GameStatu
   // If square is already filled or game is over, return unchanged
   if (
     gameStatus.board[squareIndex] !== null || 
-    gameStatus.state !== 'playing' ||
-    gameStatus.currentPlayer !== 'X'
+    gameStatus.state !== 'playing'
   ) {
     return gameStatus;
   }
@@ -92,8 +91,8 @@ export const makeAIMove = (gameStatus: GameStatus): GameStatus => {
     return gameStatus;
   }
   
-  // Random move selection (30% chance)
-  if (Math.random() < 0.3) {
+  // Random move selection (increased to 40% chance for more variation)
+  if (Math.random() < 0.4) {
     const randomIndex = Math.floor(Math.random() * availableSquares.length);
     return makeMove({ ...gameStatus, currentPlayer: 'O' }, availableSquares[randomIndex]);
   }
@@ -120,7 +119,7 @@ export const makeAIMove = (gameStatus: GameStatus): GameStatus => {
   ];
   
   // Shuffle strategies slightly for more randomness
-  if (Math.random() < 0.2) {
+  if (Math.random() < 0.3) {
     const temp = strategies[2];
     strategies[2] = strategies[3];
     strategies[3] = temp;
@@ -134,7 +133,7 @@ export const makeAIMove = (gameStatus: GameStatus): GameStatus => {
     }
   }
   
-  // Fallback - should never reach here
+  // Fallback - take the first available square
   return makeMove({ ...gameStatus, currentPlayer: 'O' }, availableSquares[0]);
 };
 

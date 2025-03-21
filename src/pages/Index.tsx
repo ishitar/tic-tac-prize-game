@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
@@ -18,6 +19,7 @@ const Index = () => {
   const resetGame = () => {
     setGameStatus(initializeGame);
     setIsPrizeModalOpen(false);
+    setAiThinking(false); // Ensure AI thinking is reset
   };
 
   // Handle player's click on a square
@@ -40,17 +42,38 @@ const Index = () => {
     setGameStatus(newGameStatus);
   };
 
-  // Handle AI's turn - with quicker response time
+  // Handle AI's turn - with quicker response time and improved reliability
   useEffect(() => {
+    let timer: NodeJS.Timeout;
+    
     // Check if it's AI's turn
     if (gameStatus.currentPlayer === 'O' && gameStatus.state === 'playing') {
       setAiThinking(true);
       
-      // Reduced timeout for quicker AI response (300ms instead of 600ms)
-      const timer = setTimeout(() => {
-        const aiGameStatus = makeAIMove(gameStatus);
-        setGameStatus(aiGameStatus);
-        setAiThinking(false);
+      // Reduced timeout for quicker AI response
+      timer = setTimeout(() => {
+        try {
+          const aiGameStatus = makeAIMove(gameStatus);
+          setGameStatus(aiGameStatus);
+        } catch (error) {
+          console.error("Error in AI move:", error);
+          // Fallback - make a random move if there's an error
+          const availableSquares = gameStatus.board
+            .map((square, i) => square === null ? i : null)
+            .filter(i => i !== null) as number[];
+            
+          if (availableSquares.length > 0) {
+            const randomIndex = Math.floor(Math.random() * availableSquares.length);
+            const fallbackGameStatus = makeMove(
+              { ...gameStatus, currentPlayer: 'O' }, 
+              availableSquares[randomIndex]
+            );
+            setGameStatus(fallbackGameStatus);
+          }
+        } finally {
+          // Ensure aiThinking is set to false regardless of success or failure
+          setAiThinking(false);
+        }
       }, 300);
       
       return () => clearTimeout(timer);
