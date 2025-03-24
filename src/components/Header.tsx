@@ -23,8 +23,8 @@ const Header: React.FC<HeaderProps> = ({ gameStatus }) => {
   const isFinished = state === 'won' || state === 'draw';
   
   return (
-    <div className="text-center mb-8 animate-fade-in">
-      <h1 className="text-3xl md:text-4xl font-light mb-3 tracking-tight">
+    <div className="text-center mb-5 animate-fade-in">
+      <h1 className="text-2xl font-bold mb-2 tracking-tight text-game-player">
         Tic Tac Prize
       </h1>
       <div 
@@ -43,8 +43,8 @@ const Header: React.FC<HeaderProps> = ({ gameStatus }) => {
         {statusMessage}
       </div>
       {winner === 'X' && (
-        <p className="mt-3 text-sm text-gray-500 animate-fade-in">
-          Congratulations! Claim your Myntra coupon.
+        <p className="mt-2 text-xs text-gray-500 animate-fade-in">
+          Win an Apple Store coupon!
         </p>
       )}
     </div>

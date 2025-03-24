@@ -8,6 +8,7 @@ import GameBoard from '@/components/GameBoard';
 import PrizeModal from '@/components/PrizeModal';
 import Header from '@/components/Header';
 import { initializeGame, makeMove, makeAIMove, GameStatus } from '@/utils/gameLogic';
+import ArticleContent from '@/components/ArticleContent';
 
 const Index = () => {
   const [gameStatus, setGameStatus] = useState<GameStatus>(initializeGame);
@@ -92,27 +93,45 @@ const Index = () => {
   }, [gameStatus]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
-      <div className="glass-card px-6 py-8 w-full max-w-md animate-scale-in">
-        {/* Game header with status */}
-        <Header gameStatus={gameStatus} />
-        
-        {/* Game board */}
-        <GameBoard 
-          gameStatus={gameStatus} 
-          onSquareClick={handleSquareClick} 
-        />
-        
-        {/* Reset button */}
-        <div className="mt-8 flex justify-center">
-          <Button 
-            onClick={resetGame} 
-            variant="outline" 
-            className="flex items-center gap-2"
-          >
-            <RotateCcw className="h-4 w-4" />
-            New Game
-          </Button>
+    <div className="min-h-screen p-4 sm:p-6 md:p-8 bg-gray-50">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Main content - Article on the left */}
+          <div className="lg:w-2/3 w-full">
+            <ArticleContent />
+          </div>
+          
+          {/* Game as an ad on the right */}
+          <div className="lg:w-1/3 w-full">
+            <div className="glass-card px-6 py-8 sticky top-8 animate-scale-in border-2 border-game-player/20 rounded-xl overflow-hidden">
+              <div className="absolute top-2 right-3 text-xs font-medium text-gray-500">Advertisement</div>
+              
+              {/* Game header with status */}
+              <Header gameStatus={gameStatus} />
+              
+              {/* Game board */}
+              <GameBoard 
+                gameStatus={gameStatus} 
+                onSquareClick={handleSquareClick} 
+              />
+              
+              {/* Reset button */}
+              <div className="mt-6 flex justify-center">
+                <Button 
+                  onClick={resetGame} 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Play Again
+                </Button>
+              </div>
+              
+              <div className="mt-4 text-center">
+                <p className="text-xs text-gray-500">Play to win Apple Store coupons!</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
