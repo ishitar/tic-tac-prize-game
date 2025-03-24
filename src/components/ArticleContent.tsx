@@ -88,7 +88,7 @@ const ArticleContent: React.FC = () => {
         
         <p>
           The update is available now for iPhone XS and newer models. To install, users can go to 
-          Settings > General > Software Update. Apple recommends backing up devices before installing the update.
+          Settings {'>'}  General {'>'}  Software Update. Apple recommends backing up devices before installing the update.
         </p>
       </div>
     </div>
